@@ -1,7 +1,7 @@
 #pragma once
 
 class Vector2f {
-    public:
+  public:
     Vector2f() noexcept;
     Vector2f(float x, float y) noexcept;
     Vector2f(const Vector2f &vec);
@@ -12,6 +12,6 @@ class Vector2f {
     void setX(float x) noexcept;
     void setY(float y) noexcept;
 
-    private:
-    float x{}, y{}; 
+  private:
+    float x{}, y{};
 };

@@ -1,8 +1,7 @@
 #pragma once
 
-class Matrix4f
-{
-public:
+class Matrix4f {
+  public:
     Matrix4f() noexcept;
     Matrix4f(float *value) noexcept;
     Matrix4f(const Matrix4f &mat) noexcept;
@@ -25,6 +24,6 @@ public:
     Matrix4f operator*(float num) noexcept;
     Matrix4f operator/(float num);
 
-private:
+  private:
     float matf[16]{};
 };

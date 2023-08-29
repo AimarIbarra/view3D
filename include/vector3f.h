@@ -1,9 +1,8 @@
 #pragma once
 #include <cmath>
 
-class Vector3f
-{
-public:
+class Vector3f {
+  public:
     Vector3f() noexcept;
     Vector3f(float x, float y, float z) noexcept;
     Vector3f(const Vector3f &vec);
@@ -33,6 +32,6 @@ public:
     Vector3f operator*(float num) noexcept;
     Vector3f operator/(float num);
 
-private:
+  private:
     float x{}, y{}, z{};
 };
