@@ -1,31 +1,16 @@
 #include "vertex.h"
 
-Vertex::Vertex() noexcept {}
+Vertex::Vertex() noexcept : position{}, normal{}, coords{} {}
 
-Vertex::Vertex(Vector3f position, Vector2f texture_coords) noexcept
-{
-    this->position = position;
-    this->texture_coords = texture_coords;
-}
+Vertex::Vertex(const Vectorf<3> &pos, const Vectorf<2> &coor) noexcept
+    : position(pos), normal{}, coords(coor) {}
 
-Vertex::Vertex(Vector3f position, Vector3f normal, Vector2f texture_coords) noexcept
-{
-    this->position = position;
-    this->normal = normal;
-    this->texture_coords = texture_coords;
-}
+Vertex::Vertex(const Vectorf<3> &pos, const Vectorf<3> &norm,
+               const Vectorf<2> &coor) noexcept
+    : position(pos), normal(norm), coords(coor) {}
 
-Vector3f Vertex::get_position() noexcept
-{
-    return this->position;
-}
+const Vectorf<3> &Vertex::get_position() const noexcept { return position; }
 
-Vector3f Vertex::get_normal() noexcept
-{
-    return this->normal;
-}
+const Vectorf<3> &Vertex::get_normal() const noexcept { return normal; }
 
-Vector2f Vertex::get_texuture_coords() noexcept
-{
-    return this->texture_coords;
-}
+const Vectorf<2> &Vertex::get_coords() const noexcept { return coords; }

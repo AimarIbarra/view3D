@@ -17,7 +17,7 @@ project(view3D
         LANGUAGES C CXX) # We may just use CXX
 
 add_subdirectory(src)
-add_subdirectory(include)
+
 option(PACKAGE_TESTS "Build the tests" ON)
 if(PACKAGE_TESTS)
     enable_testing()
