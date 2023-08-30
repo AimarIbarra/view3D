@@ -16,6 +16,9 @@ project(view3D
         DESCRIPTION "A simple 3D model viewer."
         LANGUAGES C CXX) # We may just use CXX
 
+find_package(OpenGL REQUIRED)
+find_package(GLUT REQUIRED)
+
 add_subdirectory(src)
 
 option(PACKAGE_TESTS "Build the tests" ON)
