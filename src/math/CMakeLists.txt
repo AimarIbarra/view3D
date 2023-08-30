@@ -1,2 +1,2 @@
-add_library(math INTERFACE)
-target_include_directories(math INTERFACE ".")
+add_library(math matrix.cpp)
+target_include_directories(math PUBLIC ".")

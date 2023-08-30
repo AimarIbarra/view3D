@@ -2,61 +2,87 @@
 #define VECTOR_H
 
 #include <array>
-#include <initializer_list>
+#include <ostream>
 #include <cmath>
+#include <ranges>
 
-template <typename FloatT, std::size_t len>
+template <std::size_t size>
 struct Vector {
-    std::array<FloatT, len> _vec;
+    using Type = Vector<size>;
+    using VectorType = std::array<float, size>;
+    using iterator = VectorType::iterator;
+    using const_iterator = VectorType::const_iterator;
 
-    using Type = Vector<FloatT, len>;
+    VectorType _vec;
 
-    FloatT length() const noexcept {
-        FloatT res = 0;
-        for (const auto &f : _vec) {
+    iterator begin() noexcept { return _vec.begin(); }
+    iterator end() noexcept { return _vec.end(); }
+    const_iterator cbegin() const noexcept { return _vec.cbegin(); }
+    const_iterator cend() const noexcept { return _vec.cend(); }
+    const_iterator begin() const noexcept { return _vec.begin(); }
+    const_iterator end() const noexcept { return _vec.end(); }
+  
+    float length() const noexcept {
+        float res = 0;
+        for (auto f : *this) {
             res += f * f;
         }
         return std::sqrt(res);
     }
   
     Type normalize() const noexcept {
-        FloatT length = length();
+        float len = length();
         Type res = *this;
-        for (auto &f : res._vec) {
+        for (auto &f : res) {
             f /= length;
         }
         return res;
     }
 
+    Type &operator+=(const Type &other) noexcept {
+        for (const auto &[t, o] : std::views::zip(*this, other)) {
+            t += o;
+        }
+        return *this;
+    }
+  
     Type operator+(const Type &other) const noexcept {
         Type res = *this;
-        for (std::size_t i = 0; i < len; ++i) {
-            res[i] += other[i];
-        }
+        res += other;
         return res;
+    }
+
+    Type &operator-=(const Type &other) noexcept {
+        for (const auto &[t, o] : std::views::zip(*this, other)) {
+            t -= o;
+        }
+        return *this;
     }
   
     Type operator-(const Type &other) const noexcept {
         Type res = *this;
-        for (std::size_t i = 0; i < len; ++i) {
-            res[i] -= other[i];
-        }
+        res -= other;
         return res;
     }
 
-    Type operator*(const FloatT &num) const noexcept {
-        Type res = *this;
-        for (auto &f : res._vec) {
-            f += num;
+    Type &operator*=(float num) noexcept {
+        for (auto &t : *this) {
+            t *= num;
         }
+        return *this;
+    }
+  
+    Type operator*(float num) const noexcept {
+        Type res = *this;
+        res += num;
         return res;
     }
 
     // Dot product
-    FloatT operator*(const Type &other) const noexcept {
-        FloatT res = 0;
-        for (std::size_t i = 0; i < len; ++i) {
-            res += _vec[i] * other._vec[i];
+    float operator*(const Type &other) const noexcept {
+        float res = 0;
+        for (const auto &[t, o] : std::views::zip(*this, other)) {
+            res += t * o;
         }
         return res;
     }
@@ -65,25 +91,36 @@ struct Vector {
     Type operator%(const Type &other) const noexcept {
         // NOTE: Technically the cross product is also defined for 7D vectors,
         //       so this could be "improved".
-        static_assert(len == 3, "Cross product only defined for 3D vectors.");
+        static_assert(size == 3, "Cross product only for 3D vectors.");
         return Type{_vec[1] * other[2] - _vec[2] * other[1],
                     _vec[2] * other[0] - _vec[0] * other[2],
                     _vec[0] * other[1] - _vec[1] * other[0]};
     }
 
-    const FloatT &operator[](std::size_t i) const noexcept {
+    const float &operator[](std::size_t i) const noexcept {
         return _vec[i];
     }
 
-    FloatT &operator[](std::size_t i) noexcept {
+    float &operator[](std::size_t i) noexcept {
         return _vec[i];
+    }
+
+    bool operator==(const Type &other) const noexcept {
+        for (const auto &[t, o] : std::views::zip(*this, other)) {
+            if (t != o) {
+                return false;
+            }
+        }
+        return true;
     }
 };
 
-template <std::size_t len>
-using Vectorf = Vector<float, len>;
-
-template <std::size_t len>
-using Vectord = Vector<double, len>;
+template <std::size_t size>
+std::ostream &operator<<(std::ostream &os, const Vector<size> &v) {
+    for (auto f : v) {
+        os << f << ", ";
+    }
+    return os;
+}
 
 #endif

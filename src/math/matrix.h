@@ -2,71 +2,43 @@
 #define MATRIX_H
 
 #include <array>
-#include <initializer_list>
 
 struct Matrix {
-    std::array<std::array<float, 4>, 4> _mat;
+    using MatrixType = std::array<float, 4*4>;
+    using iterator = MatrixType::iterator;
+    using const_iterator = MatrixType::const_iterator;
+  
+    MatrixType _mat;
 
-    std::array<float, 4> &operator[](std::size_t index) noexcept {
-        return _mat[index];
-    }
+    iterator begin() noexcept;
+    iterator end() noexcept;
+    const_iterator cbegin() const noexcept;
+    const_iterator cend() const noexcept;
+    const_iterator begin() const noexcept;
+    const_iterator end() const noexcept;
 
-    const std::array<float, 4> &operator[](std::size_t index) const noexcept {
-        return _mat[index];
-    }
+    struct AccessProxy {
+        float *_ptr;
+        float &operator[](std::size_t index) noexcept;
+    };
+    AccessProxy operator[](std::size_t index) noexcept;
 
-    Matrix operator+(const Matrix &other) const noexcept {
-        Matrix res = *this;
-        for (std::size_t i = 0; i < 4; ++i) {
-            for (std::size_t j = 0; j < 4; ++j) {
-                res[i][j] += other[i][j];
-            }
-        }
-        return res;
-    }
+    struct ConstAccessProxy {
+        const float *_ptr;
+        float operator[](std::size_t index) const noexcept;
+    };
+    ConstAccessProxy operator[](std::size_t index) const noexcept;
 
-    Matrix operator-(const Matrix &other) const noexcept {
-        Matrix res = *this;
-        for (std::size_t i = 0; i < 4; ++i) {
-            for (std::size_t j = 0; j < 4; ++j) {
-                res[i][j] -= other[i][j];
-            }
-        }
-        return res;
-    }
-
-    Matrix operator*(const Matrix &other) const noexcept {
-        Matrix res{};
-        // TODO: This multiplication loop is not cache friendly!
-        for (std::size_t i = 0; i < 4; ++i) {
-            for (std::size_t j = 0; j < 4; ++j) {
-                for (std::size_t k = 0; k < 4; ++k) {
-                    res[i][j] += _mat[k][j] * other[i][k];
-                }
-            }
-        }
-        return res;
-    }
-
-    Matrix operator*(const float &num) noexcept {
-        Matrix res = *this;
-        for (std::size_t i = 0; i < 4; ++i) {
-            for (std::size_t j = 0; j < 4; ++j) {
-                res[i][j] *= num;
-            }
-        }
-        return res;
-    }
-
-    Matrix operator/(const float &num) noexcept {
-        Matrix res = *this;
-        for (std::size_t i = 0; i < 4; ++i) {
-            for (std::size_t j = 0; j < 4; ++j) {
-                res[i][j] /= num;
-            }
-        }
-        return res;
-    }
+    Matrix &operator+=(const Matrix &other) noexcept;
+    Matrix operator+(const Matrix &other) const noexcept;
+    Matrix &operator-=(const Matrix &other) noexcept;
+    Matrix operator-(const Matrix &other) const noexcept;
+    Matrix operator*(const Matrix &other) const noexcept;
+    Matrix &operator*=(float num) noexcept;
+    Matrix operator*(float num) const noexcept;
+    Matrix &operator/=(float num) noexcept;
+    Matrix operator/(float num) const noexcept;
+    bool operator==(const Matrix &other) const noexcept;
 };
 
 #endif
