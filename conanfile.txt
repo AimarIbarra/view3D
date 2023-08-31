@@ -1,0 +1,6 @@
+[requires]
+freeglut/3.4.0
+
+[generators]
+CMakeDeps
+CMakeToolchain
