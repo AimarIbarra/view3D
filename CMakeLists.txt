@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.21)
+set(CMAKE_TOOLCHAIN_FILE "~/view3d/build/conan_toolchain.cmake")
 
 # We on the edge baby
 set(CMAKE_C_STANDARD 23)
