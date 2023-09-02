@@ -18,3 +18,4 @@ endmacro()
 
 package_add_test(matrix math matrix.test.cpp)
 package_add_test(vector math vector.test.cpp)
+package_add_test(obj_parser data obj_parser.test.cpp)
